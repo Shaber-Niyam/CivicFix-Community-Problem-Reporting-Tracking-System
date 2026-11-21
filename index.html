@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0F3D3A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="CivicFix" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230F3D3A'/%3E%3Cpath d='M256 84L116 144v108c0 96 60 182 140 208 80-26 140-112 140-208V144L256 84z' fill='%236C151E' stroke='%23F5DABF' stroke-width='18'/%3E%3Ccircle cx='256' cy='242' r='44' fill='%23F5DABF'/%3E%3C/svg%3E" />
+  <title>CivicFix — Your Community. Your Voice. Your CivicFix.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="min-h-screen antialiased">
+  <!-- Toast Stack -->
+  <div id="toast-container" aria-live="polite" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+  <!-- Tactile Confirmation Modal -->
+  <div id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-[2px] p-4">
+    <div class="neu-modal max-w-sm w-full rounded-[24px] p-6 sm:p-7 text-center space-y-4">
+      <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl neu-inset text-[#D9682A]">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 id="confirm-modal-title" class="text-lg font-extrabold text-brand-green">Confirm Action</h3>
+      <p id="confirm-modal-message" class="text-xs text-muted leading-relaxed"></p>
+      <div class="flex items-center justify-center gap-3 pt-2">
+        <button type="button" id="confirm-modal-cancel" class="neu-raised rounded-full px-5 py-2 text-xs font-bold text-surface">Cancel</button>
+        <button type="button" id="confirm-modal-proceed" class="btn-bordo rounded-full px-5 py-2 text-xs font-bold">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase Project Connection Modal -->
+  <div id="supabase-modal" role="dialog" aria-modal="true" aria-labelledby="supabase-modal-title" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-[2px] p-4">
+    <div class="neu-modal max-w-lg w-full rounded-[24px] p-6 sm:p-8 space-y-4">
+      <div class="flex items-center justify-between border-b border-surface pb-3">
+        <h3 id="supabase-modal-title" class="text-lg font-extrabold text-brand-green">Supabase Connection</h3>
+        <button type="button" id="close-supabase-modal" aria-label="Close modal" class="neu-raised rounded-full h-8 w-8 flex items-center justify-center text-xs font-bold text-muted hover:text-surface">✕</button>
+      </div>
+      <p class="text-xs text-muted leading-relaxed">
+        Enter your <code class="font-mono text-bordo">NEXT_PUBLIC_SUPABASE_URL</code> and <code class="font-mono text-bordo">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> from your Supabase project after executing the SQL migrations in <code class="font-mono">supabase/migrations/</code>.
+      </p>
+      <div class="space-y-3">
+        <div>
+          <label for="sb-url-input" class="block text-xs font-bold uppercase tracking-wider text-muted mb-1">Supabase URL</label>
+          <input id="sb-url-input" type="url" placeholder="https://your-project.supabase.co" class="w-full rounded-xl px-3.5 py-2.5 text-sm" />
+        </div>
+        <div>
+          <label for="sb-key-input" class="block text-xs font-bold uppercase tracking-wider text-muted mb-1">Supabase Anon Key</label>
+          <input id="sb-key-input" type="password" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI..." class="w-full rounded-xl px-3.5 py-2.5 text-sm" />
+        </div>
+      </div>
+      <div class="flex items-center justify-between pt-3">
+        <button type="button" id="disconnect-supabase-btn" class="text-xs font-bold text-bordo hover:underline">Clear Credentials</button>
+        <button type="button" id="save-supabase-btn" class="btn-primary rounded-full px-6 py-2.5 text-xs font-bold">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo Lightbox -->
+  <div id="lightbox-modal" role="dialog" aria-modal="true" aria-label="Photo Lightbox" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4">
+    <button type="button" id="close-lightbox-btn" aria-label="Close photo preview" class="btn-bordo absolute top-5 right-5 rounded-full px-4 py-2 text-xs font-bold">Close ✕</button>
+    <img id="lightbox-img" src="" alt="Full size report evidence" class="max-h-[85vh] max-w-[92vw] rounded-2xl object-contain border border-white/20" />
+  </div>
+
+  <div id="app-root"></div>
+
+  <script src="js/app.js"></script>
+  <script>if ("serviceWorker" in navigator) { window.addEventListener("load", function () { navigator.serviceWorker.register("./sw.js").catch(function () {}); }); }</script>
+</body>
+</html>

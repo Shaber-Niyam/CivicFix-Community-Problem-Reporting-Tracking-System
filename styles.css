@@ -1,0 +1,171 @@
+/* CivicFix — Tactile Design System & Layout Stylesheet (css/styles.css) */
+
+  :root {
+    --color-bordo: #6C151E;
+    --color-bordo-hover: #55101A;
+    --color-bordo-pressed: #470D15;
+    --color-green: #124E4B;
+    --color-green-deep: #0A2B28;
+    --color-cream: #F5DABF;
+    --color-cream-soft: #EDE4D4;
+    --color-bg: #F3EDE2;
+    --color-card: #F6F1E7;
+    --color-border: rgba(255, 255, 255, 0.78);
+    --color-text: #1A2B29;
+    --color-muted: #647370;
+
+    /* Tactile Neumorphic Shadows */
+    --neu-raised: -6px -6px 14px rgba(255, 255, 255, 0.86), 6px 6px 14px rgba(168, 154, 132, 0.28);
+    --neu-hover: -8px -8px 18px rgba(255, 255, 255, 0.92), 8px 8px 18px rgba(168, 154, 132, 0.34);
+    --neu-inset: inset 3px 3px 7px rgba(168, 154, 132, 0.32), inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+    --neu-pressed: inset 4px 4px 9px rgba(145, 131, 109, 0.42), inset -2px -2px 6px rgba(255, 255, 255, 0.65);
+    --neu-modal: -10px -10px 24px rgba(255, 255, 255, 0.72), 14px 14px 32px rgba(140, 126, 105, 0.35);
+
+    /* Semantic Status Colors */
+    --status-submitted: #8A7B6A;
+    --status-review: #D99A1E;
+    --status-progress: #1F8A7D;
+    --status-resolved: #2E9E5B;
+    --status-rejected: #6C151E;
+
+    /* Priority Colors */
+    --priority-low: #64748B;
+    --priority-medium: #D99A1E;
+    --priority-high: #D9682A;
+    --priority-critical: #B3261E;
+
+    --focus-ring: #124E4B;
+  }
+
+  html.dark {
+    --color-bordo: #9B2432;
+    --color-bordo-hover: #B32B3B;
+    --color-bordo-pressed: #7E1C28;
+    --color-green: #124E4B;
+    --color-green-deep: #061A18;
+    --color-cream: #F5DABF;
+    --color-cream-soft: #133935;
+    --color-bg: #071C1A;
+    --color-card: #0F2F2C;
+    --color-border: rgba(30, 71, 67, 0.85);
+    --color-text: #F5DABF;
+    --color-muted: #A3B8B4;
+
+    --neu-raised: -5px -5px 12px rgba(24, 68, 64, 0.42), 6px 6px 14px rgba(2, 10, 9, 0.65);
+    --neu-hover: -7px -7px 16px rgba(24, 68, 64, 0.55), 8px 8px 18px rgba(2, 10, 9, 0.75);
+    --neu-inset: inset 3px 3px 7px rgba(2, 10, 9, 0.65), inset -3px -3px 7px rgba(24, 68, 64, 0.35);
+    --neu-pressed: inset 4px 4px 9px rgba(2, 10, 9, 0.78), inset -2px -2px 6px rgba(24, 68, 64, 0.25);
+    --neu-modal: -8px -8px 20px rgba(24, 68, 64, 0.45), 14px 14px 32px rgba(2, 10, 9, 0.8);
+    --focus-ring: #F5DABF;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    margin: 0;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  }
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-enter {
+    animation: fadeSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .bg-surface-bg { background-color: var(--color-bg); }
+  .bg-surface-card { background-color: var(--color-card); }
+  .border-surface { border-color: var(--color-border); }
+  .text-surface { color: var(--color-text); }
+  .text-muted { color: var(--color-muted); }
+  .bg-rail { background-color: var(--color-cream-soft); }
+  .bg-cream { background-color: var(--color-cream); }
+  .text-cream { color: var(--color-cream); }
+  .text-brand-green { color: var(--color-green); }
+  html.dark .text-brand-green { color: var(--color-cream); }
+  .text-bordo { color: var(--color-bordo); }
+
+  .neu-raised {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--neu-raised);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .neu-raised-hover:hover {
+    box-shadow: var(--neu-hover);
+    transform: translateY(-1px);
+  }
+  .neu-inset {
+    background-color: var(--color-bg);
+    box-shadow: var(--neu-inset);
+    border: 1px solid transparent;
+  }
+  .neu-modal {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--neu-modal);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="url"],
+  select,
+  textarea {
+    background-color: var(--color-bg);
+    box-shadow: var(--neu-inset);
+    border: 1px solid transparent;
+    color: var(--color-text);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--color-green);
+    box-shadow: var(--neu-inset), 0 0 0 3px rgba(18, 78, 75, 0.18);
+    outline: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(145deg, #165B57, #0E3E3B);
+    color: #F5DABF;
+    box-shadow: 0 4px 12px rgba(15, 61, 58, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.22);
+    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    box-shadow: var(--neu-pressed);
+    transform: translateY(0);
+  }
+
+  .btn-bordo {
+    background: linear-gradient(145deg, #7C1924, #5A1018);
+    color: #F5DABF;
+    box-shadow: 0 4px 12px rgba(108, 21, 30, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-bordo:hover {
+    filter: brightness(1.07);
+    transform: translateY(-1px);
+  }
+  .btn-bordo:active {
+    box-shadow: var(--neu-pressed);
+    transform: translateY(0);
+  }
+
+  .leaflet-container {
+    font-family: 'Inter', sans-serif;
+    z-index: 10;
+  }
